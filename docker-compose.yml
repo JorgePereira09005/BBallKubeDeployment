@@ -1,0 +1,44 @@
+version: "3"
+services:
+    mysql:
+        image: "mysql:latest"
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=dbuser
+            - MYSQL_PASSWORD=dbuser
+        ports:
+            - 3306:3306
+        restart: always
+        volumes:
+            - db-data:/var/lib/mysql
+        networks:
+            - backend_net
+    bballservice:
+        build:
+            dockerfile: Dockerfile
+            context: ./BBallService/BBallService
+        restart: always
+        depends_on: 
+            - mysql
+        ports:
+            - 35500:35500
+        environment:
+            ConnectionStrings__DefaultConnection: server=mysql;uid=root;pwd=root;database=BBallService;
+            PictureServiceUrl: http://pictureservice:8080/api/picture
+        networks:
+            - backend_net
+    pictureservice:
+        build:
+            dockerfile: Dockerfile
+            context: ./PictureService
+        restart: always
+        ports:
+            - 8080:8080
+        networks:
+            - backend_net
+
+volumes:
+    db-data:
+
+networks:
+    backend_net:

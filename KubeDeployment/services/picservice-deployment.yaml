@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bball-picture-service
+  labels:
+    app: picture-service
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: picture-service
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picture-service
+  labels:
+    app: picture-service
+spec:
+  selector:
+    matchLabels:
+      app: picture-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: picture-service
+    spec:
+      containers:
+      - image: jpmc9005/pictureservice:1.0
+        name: picture-service
+        ports:
+        - containerPort: 8080
+          name: picture-service

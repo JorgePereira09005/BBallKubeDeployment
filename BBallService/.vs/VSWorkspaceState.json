@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\BBallService",
+    "\\BBallServiceTest\\ControllerTest",
+    "\\BBallService\\Models",
+    "\\BBallService\\Repository\\Interfaces"
+  ],
+  "SelectedNode": "\\BBallService\\Models\\PlayerInfo.cs",
+  "PreviewInSolutionExplorer": false
+}

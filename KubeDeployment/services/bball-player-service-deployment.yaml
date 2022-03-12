@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bball-player-service
+  labels:
+    app: player-service
+spec:
+  ports:
+    - port: 35500
+  selector:
+    app: player-service
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: player-service
+  labels:
+    app: player-service
+spec:
+  selector:
+    matchLabels:
+      app: player-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: player-service
+    spec:
+      containers:
+      - image: jpmc9005/bballservice:1.0
+        name: player-service
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: server=bball-mysql;uid=root;pwd=root;database=BBallService;
+        - name: PictureServiceUrl
+          value: http://bball-picture-service:8080/api/picture
+        ports:
+        - containerPort: 35500
+          name: player-service
